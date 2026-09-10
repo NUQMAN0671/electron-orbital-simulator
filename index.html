@@ -1,1 +1,152 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electron Orbital & Hybridization Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- LEFT PANEL -->
+    <div class="panel">
+      <div>
+        <h1>Orbital Simulator</h1>
+        <p style="font-size:0.72rem;color:#64748b;">Ground → Hybrid → Molecule</p>
+      </div>
 
+      <div class="section">
+        <h2>Mod Utama</h2>
+        <div class="mode-tabs">
+          <button id="btn-mode-orbital" class="active">Orbital</button>
+          <button id="btn-mode-molecule">Molekul</button>
+        </div>
+      </div>
+
+      <!-- ORBITAL CONTROLS -->
+      <div id="orbital-controls">
+        <div class="section">
+          <h2>Keadaan</h2>
+          <div class="mode-tabs">
+            <button id="btn-ground" class="active">Ground</button>
+            <button id="btn-hybrid">Hybrid</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Jenis Hybridization</h2>
+          <div class="btn-group">
+            <button id="btn-sp3" class="active">sp³ (Tetrahedral)</button>
+            <button id="btn-sp2">sp² (Trigonal Planar)</button>
+            <button id="btn-sp">sp (Linear)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOLECULE CONTROLS -->
+      <div id="molecule-controls" style="display:none;">
+        <div class="section">
+          <h2>Pilih Molekul</h2>
+          <div class="btn-group">
+            <button id="btn-mol-ch4" class="active">CH₄ (Methane)</button>
+            <button id="btn-mol-c2h4">C₂H₄ (Ethene)</button>
+            <button id="btn-mol-c2h2">C₂H₂ (Ethyne)</button>
+            <button id="btn-mol-h2o">H₂O (Water)</button>
+            <button id="btn-mol-nh3">NH₃ (Ammonia)</button>
+            <button id="btn-mol-co2">CO₂ (Carbon Dioxide)</button>
+          </div>
+        </div>
+        <div class="section">
+          <h2>Paparan</h2>
+          <div class="btn-group">
+            <button id="btn-show-bonds" class="active">Tunjuk Bond</button>
+            <button id="btn-show-orbitals">Tunjuk Orbital Hybrid</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Kawalan</h2>
+        <div class="controls">
+          <button id="btn-animate">▶ Animasi</button>
+          <button id="btn-reset">Reset</button>
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Saiz: <span id="size-val">1.0</span></label>
+        <input type="range" id="size" min="0.5" max="1.6" step="0.05" value="1.0" />
+      </div>
+
+      <div class="info-box" id="info-box">
+        <strong>Ground State (Karbon)</strong><br>
+        • 2s : sfera<br>
+        • 2pₓ, 2pᵧ, 2p_z : dumbbell<br>
+        Empat orbital berasingan.
+      </div>
+
+      <div class="status">
+        Drag = rotate • Scroll = zoom
+      </div>
+    </div>
+
+    <!-- CENTER -->
+    <div id="canvas-container">
+      <div class="overlay" id="overlay-label">Ground State — 2s + 2pₓ + 2pᵧ + 2p_z</div>
+      <canvas id="c"></canvas>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel right">
+      <div>
+        <h2>Keterangan</h2>
+        <div class="info-box" id="desc-box">
+          Dalam <strong>ground state</strong>, orbital 2s dan 2p berbeza. Hybridization menghasilkan orbital setara untuk membentuk ikatan.
+        </div>
+      </div>
+
+      <div>
+        <h2>Warna</h2>
+        <div class="legend" id="legend-box">
+          <div class="legend-item"><div class="dot" style="background:#60a5fa"></div> Orbital s / hybrid</div>
+          <div class="legend-item"><div class="dot" style="background:#f87171"></div> Orbital pₓ</div>
+          <div class="legend-item"><div class="dot" style="background:#4ade80"></div> Orbital pᵧ</div>
+          <div class="legend-item"><div class="dot" style="background:#fbbf24"></div> Orbital p_z</div>
+          <div class="legend-item"><div class="dot" style="background:#94a3b8"></div> Atom C / N / O</div>
+          <div class="legend-item"><div class="dot" style="background:#e2e8f0"></div> Atom H</div>
+          <div class="legend-item"><div class="dot" style="background:#f97316"></div> Bond (ikatan)</div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Geometri & Bond</h2>
+        <div class="info-box" id="geo-box">
+          <strong>sp³</strong><br>
+          4 orbital hybrid<br>
+          Sudut: 109.5°<br>
+          Contoh: CH₄, NH₃, H₂O
+        </div>
+      </div>
+
+      <div>
+        <h2>Ringkasan Hybridization</h2>
+        <div class="info-box" style="font-size:0.78rem">
+          <strong>sp³</strong> → 4 σ bond (tetrahedral)<br>
+          <strong>sp²</strong> → 3 σ + 1 π (trigonal)<br>
+          <strong>sp</strong> → 2 σ + 2 π (linear)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
