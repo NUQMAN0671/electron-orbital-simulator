@@ -1,0 +1,158 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  background-color: #161b22;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #30363d;
+}
+
+header h1 {
+  font-size: 1.25rem;
+  color: #58a6ff;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 55px);
+}
+
+/* 3D Canvas Area */
+#canvas-container {
+  flex: 1;
+  position: relative;
+  background-color: #05070a;
+}
+
+/* Control Panel Overlays */
+.overlay-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(22, 27, 34, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #30363d;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 240px;
+  z-index: 10;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8b949e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  background-color: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #58a6ff;
+}
+
+/* Sidebar / Configuration Panel */
+.sidebar {
+  width: 320px;
+  background-color: #161b22;
+  border-left: 1px solid #30363d;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  font-size: 1.1rem;
+  color: #f0f6fc;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 8px;
+}
+
+.info-card {
+  background: #21262d;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+}
+
+.info-card h3 {
+  font-size: 0.9rem;
+  color: #8b949e;
+  margin-bottom: 6px;
+}
+
+.info-card p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #58a6ff;
+}
+
+/* Electron Configuration Box Representation */
+.config-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subshell-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subshell-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: 40px;
+}
+
+.orbital-boxes {
+  display: flex;
+  gap: 6px;
+}
+
+.box {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #58a6ff;
+  background-color: #0d1117;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #3fb950;
+  border-radius: 4px;
+}
