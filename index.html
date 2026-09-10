@@ -1,73 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Electron Orbital Simulator</title>
-  <link rel="stylesheet" href="styles.css">
   
-  <!-- Import Three.js & OrbitControls -->
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Three.js & OrbitControls via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
-  <header>
-    <h1>Electron Orbital Simulator</h1>
-  </header>
+  <!-- Left Sidebar Controls -->
+  <aside id="sidebar">
+    <header>
+      <h1>Electron Orbital Simulator</h1>
+      <p class="subtitle">3D Quantum & Bohr Atomic Models</p>
+    </header>
 
-  <div class="main-container">
-    <!-- Viewport -->
-    <div id="canvas-container">
-      <div class="overlay-panel">
-        <div>
-          <label for="element-select">Select Element</label>
-          <select id="element-select">
-            <option value="H">1 - Hydrogen (H)</option>
-            <option value="He">2 - Helium (He)</option>
-            <option value="Li">3 - Lithium (Li)</option>
-            <option value="C">6 - Carbon (C)</option>
-            <option value="O">8 - Oxygen (O)</option>
-            <option value="Ne">10 - Neon (Ne)</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="model-select">Visualization Model</label>
-          <select id="model-select">
-            <option value="bohr">Bohr Model (Orbits)</option>
-            <option value="cloud">Electron Cloud (Probability)</option>
-          </select>
-        </div>
-      </div>
+    <div class="control-group">
+      <label for="mode-select">Visualization Mode</label>
+      <select id="mode-select">
+        <option value="orbital">3D Electron Orbital Cloud</option>
+        <option value="bohr">Bohr Atomic Model</option>
+      </select>
     </div>
 
-    <!-- Sidebar Info Panel -->
-    <div class="sidebar">
-      <h2>Element Information</h2>
-      
-      <div class="info-card">
-        <h3>Symbol & Name</h3>
-        <p id="info-name">Hydrogen (H)</p>
-      </div>
+    <div class="control-group">
+      <label>Periodic Table</label>
+      <div id="periodic-table"></div>
+    </div>
 
-      <div class="info-card">
-        <h3>Atomic Number</h3>
-        <p id="info-atomic-num">1</p>
-      </div>
-
-      <div class="info-card">
-        <h3>Electron Configuration</h3>
-        <p id="info-config">1s¹</p>
-      </div>
-
-      <h2>Subshell Filling</h2>
-      <div class="config-container" id="subshell-boxes">
-        <!-- Rendered dynamically -->
+    <div class="control-group">
+      <label>Electron Configuration</label>
+      <div id="config-panel">
+        <div id="config-string"></div>
+        <div id="orbital-chips" class="orbital-box-container"></div>
       </div>
     </div>
-  </div>
+  </aside>
 
-  <script src="script.js"></script>
+  <!-- Right 3D Viewport -->
+  <main id="viewport">
+    <div id="info-overlay">
+      <h2 id="element-display">Hydrogen (H)</h2>
+      <p id="details-display">Atomic Number: 1</p>
+    </div>
+    <div id="canvas-container"></div>
+  </main>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
 </body>
 </html>
