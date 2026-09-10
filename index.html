@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Electron Orbital Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <!-- LEFT: 3D Viewport & Periodic Table -->
+        <div id="left-pane">
+            <div id="viewport-container">
+                <div id="element-title">Nitrogen (7)</div>
+                
+                <!-- View Mode Controls overlay -->
+                <div id="view-controls">
+                    <button id="btn-mode-quantum" class="active">Quantum Orbitals</button>
+                    <button id="btn-mode-bohr">Bohr Model</button>
+                    <label class="toggle-btn"><input type="checkbox" id="chk-valence"> Valence Only</label>
+                </div>
+            </div>
+
+            <div id="ptable-container">
+                <div class="ptable-controls">
+                    <label for="color-mode-select">Color Table By: </label>
+                    <select id="color-mode-select">
+                        <option value="state">Metal / Non-Metal / State</option>
+                        <option value="block">Orbital Block (s, p, d, f)</option>
+                        <option value="group">Group Type</option>
+                    </select>
+                </div>
+                <div id="periodic-table"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Interactive Configuration & Filling Diagrams -->
+        <div id="right-pane">
+            <h3>Orbital Layer Selector</h3>
+            
+            <div id="diagram-container"></div>
+            
+            <div id="shorthand-box">
+                <div class="shorthand-header">
+                    <span class="label">Electron Configuration</span>
+                    <label class="toggle-btn"><input type="checkbox" id="chk-condensed"> Condensed</label>
+                </div>
+                <div id="shorthand-text">1s² 2s² 2p³</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
