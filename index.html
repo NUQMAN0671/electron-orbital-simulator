@@ -1,58 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Electron Orbital Simulator</title>
-  
-  <!-- External CSS -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Three.js & OrbitControls via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Electron Orbital Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+    <div id="app-container">
+        <!-- Main Left Section (Viewport + Collapsible Table) -->
+        <div id="main-section">
+            <!-- 3D Canvas Viewport -->
+            <div id="viewport-container">
+                <div id="overlay-controls">
+                    <h1 id="element-title">Nitrogen (7)</h1>
+                    <div class="mode-toggles">
+                        <button id="btn-mode-quantum" class="active">Quantum Orbitals</button>
+                        <button id="btn-mode-bohr">Bohr Model</button>
+                        <label class="chk-label">
+                            <input type="checkbox" id="chk-valence"> Valence Only
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-  <!-- Left Sidebar Controls -->
-  <aside id="sidebar">
-    <header>
-      <h1>Electron Orbital Simulator</h1>
-      <p class="subtitle">3D Quantum & Bohr Atomic Models</p>
-    </header>
+            <!-- Collapsible Periodic Table Drawer -->
+            <div id="periodic-drawer" class="expanded">
+                <button id="btn-toggle-drawer" class="drawer-handle">
+                    <span id="drawer-arrow">▼</span> <span id="drawer-text">Minimize Periodic Table</span>
+                </button>
+                <div id="drawer-content">
+                    <div class="table-controls">
+                        <label for="color-mode-select">Color Table By:</label>
+                        <select id="color-mode-select">
+                            <option value="group">Metal / Non-Metal / State</option>
+                            <option value="block">Block (s, p, d, f)</option>
+                            <option value="state">State of Matter</option>
+                        </select>
+                    </div>
+                    <div id="periodic-table"></div>
+                </div>
+            </div>
+        </div>
 
-    <div class="control-group">
-      <label for="mode-select">Visualization Mode</label>
-      <select id="mode-select">
-        <option value="orbital">3D Electron Orbital Cloud</option>
-        <option value="bohr">Bohr Atomic Model</option>
-      </select>
+        <!-- Right Side Control Panel -->
+        <div id="sidebar">
+            <h2>ORBITAL LAYERS</h2>
+            <div id="diagram-container"></div>
+            <div id="shorthand-container">
+                <div class="shorthand-header">
+                    <span>Electron Configuration</span>
+                    <label class="chk-label">
+                        <input type="checkbox" id="chk-condensed" checked> Condensed
+                    </label>
+                </div>
+                <div id="shorthand-text"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="control-group">
-      <label>Periodic Table</label>
-      <div id="periodic-table"></div>
-    </div>
-
-    <div class="control-group">
-      <label>Electron Configuration</label>
-      <div id="config-panel">
-        <div id="config-string"></div>
-        <div id="orbital-chips" class="orbital-box-container"></div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Right 3D Viewport -->
-  <main id="viewport">
-    <div id="info-overlay">
-      <h2 id="element-display">Hydrogen (H)</h2>
-      <p id="details-display">Atomic Number: 1</p>
-    </div>
-    <div id="canvas-container"></div>
-  </main>
-
-  <!-- Application Logic -->
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
