@@ -58,17 +58,17 @@ const ELEMENTS = [
 
 // --- Subshell Definitions with Unique Colors ---
 const SUBSHELLS = [
-    { name: "1s", n: 1, capacity: 2, boxes: 1, type: "s", radius: 1.2, color: 0x87ceeb }, // Light Blue
-    { name: "2s", n: 2, capacity: 2, boxes: 1, type: "s", radius: 2.2, color: 0x2ecc71 }, // Green
-    { name: "2p", n: 2, capacity: 6, boxes: 3, type: "p", radius: 3.5, color: 0xe74c3c }, // Red
-    { name: "3s", n: 3, capacity: 2, boxes: 1, type: "s", radius: 4.8, color: 0xf1c40f }, // Yellow
-    { name: "3p", n: 3, capacity: 6, boxes: 3, type: "p", radius: 6.2, color: 0x9b59b6 }, // Purple
-    { name: "4s", n: 4, capacity: 2, boxes: 1, type: "s", radius: 7.5, color: 0x1abc9c }, // Teal
-    { name: "3d", n: 3, capacity: 10, boxes: 5, type: "d", radius: 8.8, color: 0xe67e22 }, // Orange
-    { name: "4p", n: 4, capacity: 6, boxes: 3, type: "p", radius: 10.2, color: 0xff9ff3 }, // Pink
-    { name: "5s", n: 5, capacity: 2, boxes: 1, type: "s", radius: 11.5, color: 0x00d2d3 }, // Cyan
-    { name: "4d", n: 4, capacity: 10, boxes: 5, type: "d", radius: 12.8, color: 0xfeca57 }, // Gold
-    { name: "5p", n: 5, capacity: 6, boxes: 3, type: "p", radius: 14.2, color: 0x54a0ff }  // Sky Blue
+    { name: "1s", n: 1, capacity: 2, boxes: 1, type: "s", radius: 1.2, color: 0x87ceeb },
+    { name: "2s", n: 2, capacity: 2, boxes: 1, type: "s", radius: 2.2, color: 0x2ecc71 },
+    { name: "2p", n: 2, capacity: 6, boxes: 3, type: "p", radius: 3.5, color: 0xe74c3c },
+    { name: "3s", n: 3, capacity: 2, boxes: 1, type: "s", radius: 4.8, color: 0xf1c40f },
+    { name: "3p", n: 3, capacity: 6, boxes: 3, type: "p", radius: 6.2, color: 0x9b59b6 },
+    { name: "4s", n: 4, capacity: 2, boxes: 1, type: "s", radius: 7.5, color: 0x1abc9c },
+    { name: "3d", n: 3, capacity: 10, boxes: 5, type: "d", radius: 8.8, color: 0xe67e22 },
+    { name: "4p", n: 4, capacity: 6, boxes: 3, type: "p", radius: 10.2, color: 0xff9ff3 },
+    { name: "5s", n: 5, capacity: 2, boxes: 1, type: "s", radius: 11.5, color: 0x00d2d3 },
+    { name: "4d", n: 4, capacity: 10, boxes: 5, type: "d", radius: 12.8, color: 0xfeca57 },
+    { name: "5p", n: 5, capacity: 6, boxes: 3, type: "p", radius: 14.2, color: 0x54a0ff }
 ];
 
 let selectedElement = ELEMENTS.find(e => e.sym === "N");
@@ -120,7 +120,6 @@ function createTextSprite(text, colorStr = '#ffffff') {
 
 // --- 3D Mesh Helpers ---
 
-// Solid Black Nucleus
 function createNucleus() {
     const geometry = new THREE.SphereGeometry(0.5, 32, 32);
     const material = new THREE.MeshStandardMaterial({
@@ -133,11 +132,10 @@ function createNucleus() {
     return new THREE.Mesh(geometry, material);
 }
 
-// Dynamically Scaled 3D Axis Helper with Labeled Ends
 function createAxes(length) {
     const axisGroup = new THREE.Group();
 
-    // X Axis (Red) + Label
+    // X Axis
     const xMat = new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 });
     const xGeom = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(-length, 0, 0),
@@ -149,7 +147,7 @@ function createAxes(length) {
     xSprite.position.set(length + 1.2, 0, 0);
     axisGroup.add(xSprite);
 
-    // Y Axis (Green) + Label
+    // Y Axis
     const yMat = new THREE.LineBasicMaterial({ color: 0x33ff33, linewidth: 2 });
     const yGeom = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, -length, 0),
@@ -161,7 +159,7 @@ function createAxes(length) {
     ySprite.position.set(0, length + 1.2, 0);
     axisGroup.add(ySprite);
 
-    // Z Axis (Blue) + Label
+    // Z Axis
     const zMat = new THREE.LineBasicMaterial({ color: 0x3388ff, linewidth: 2 });
     const zGeom = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, 0, -length),
@@ -176,7 +174,6 @@ function createAxes(length) {
     return axisGroup;
 }
 
-// Rugby Ball Shaped Lobe Pair
 function createLobe(scale, rx, ry, rz, color) {
     const lobeGroup = new THREE.Group();
 
@@ -204,7 +201,6 @@ function createLobe(scale, rx, ry, rz, color) {
     return lobeGroup;
 }
 
-// d-Orbital Geometries with Rugby Ball Lobes
 function createDSublevel(subInfo, count) {
     const group = new THREE.Group();
     const scale = subInfo.radius * 0.16;
@@ -248,7 +244,6 @@ function build3DScene() {
 
     const showValenceOnly = document.getElementById('chk-valence').checked;
 
-    // Dynamically calculate outermost orbital radius
     let maxRadius = 3;
     activeConfig.forEach(sub => {
         if (!sub.visible || sub.count === 0) return;
@@ -267,15 +262,11 @@ function build3DScene() {
         }
     });
 
-    // Add X, Y, Z reference axes dynamic length (+2.5 padding beyond outer shell)
     const dynamicAxisLength = maxRadius + 2.5;
     atomGroup.add(createAxes(dynamicAxisLength));
-
-    // Add solid black central nucleus
     atomGroup.add(createNucleus());
 
     if (currentViewMode === "quantum") {
-        // --- Quantum Orbital Mesh View ---
         activeConfig.forEach(sub => {
             if (!sub.visible || sub.count === 0) return;
             if (showValenceOnly && sub.n !== selectedElement.valN) return;
@@ -284,7 +275,7 @@ function build3DScene() {
             if (!subInfo) return;
 
             if (subInfo.type === 's') {
-                const fillRatio = sub.count / sub.capacity; // 0.5 for s1, 1.0 for s2
+                const fillRatio = sub.count / sub.capacity;
                 const radiusScale = fillRatio === 0.5 ? 0.28 : 0.38;
                 const opacityVal = fillRatio === 0.5 ? 0.22 : 0.35;
 
@@ -309,7 +300,6 @@ function build3DScene() {
             }
         });
     } else {
-        // --- Bohr Model View ---
         const shells = {};
         activeConfig.forEach(sub => {
             if (!sub.visible) return;
@@ -322,14 +312,12 @@ function build3DScene() {
             const count = shells[n];
             const radius = n * 2.5 + 1.5;
 
-            // Concentric Ring
             const ringGeom = new THREE.RingGeometry(radius - 0.05, radius + 0.05, 64);
             const ringMat = new THREE.MeshBasicMaterial({ color: 0x58a6ff, side: THREE.DoubleSide });
             const ringMesh = new THREE.Mesh(ringGeom, ringMat);
             ringMesh.rotation.x = Math.PI / 2;
             atomGroup.add(ringMesh);
 
-            // Orbiting Electrons
             for (let i = 0; i < count; i++) {
                 const angle = (i / count) * Math.PI * 2;
                 const eGeom = new THREE.SphereGeometry(0.2, 16, 16);
@@ -407,7 +395,6 @@ function renderRightDiagram() {
         const row = document.createElement('div');
         row.className = `shell-row ${isValence ? 'valence-highlight' : ''}`;
 
-        // Checkbox Layer Toggle
         const toggleDiv = document.createElement('label');
         toggleDiv.className = 'shell-toggle';
         
@@ -427,7 +414,6 @@ function renderRightDiagram() {
         toggleDiv.appendChild(label);
         row.appendChild(toggleDiv);
 
-        // Orbital Boxes
         const boxesGroup = document.createElement('div');
         boxesGroup.className = 'boxes-group';
 
@@ -449,7 +435,6 @@ function renderRightDiagram() {
         container.appendChild(row);
     });
 
-    // Condensed vs Full Shorthand Display
     const isCondensed = document.getElementById('chk-condensed').checked;
     let shorthandHtml = "";
 
@@ -480,6 +465,25 @@ function selectElement(elem) {
     renderRightDiagram();
     build3DScene();
 }
+
+// --- Collapsible Drawer Handler ---
+const ptableDrawer = document.getElementById('ptable-drawer');
+const toggleBtn = document.getElementById('ptable-toggle-btn');
+const drawerIcon = document.getElementById('drawer-icon');
+
+toggleBtn.addEventListener('click', () => {
+    ptableDrawer.classList.toggle('collapsed');
+    const isCollapsed = ptableDrawer.classList.contains('collapsed');
+    drawerIcon.innerText = isCollapsed ? '▲' : '▼';
+
+    setTimeout(() => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    }, 320);
+});
 
 // --- Event Listeners ---
 document.getElementById('color-mode-select').addEventListener('change', renderPeriodicTable);
@@ -512,6 +516,17 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+
+animate();
+
 
 window.addEventListener('resize', () => {
     const w = container.clientWidth;
