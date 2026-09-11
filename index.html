@@ -12,7 +12,7 @@
 <body>
 
     <div id="app">
-        <!-- LEFT: 3D Viewport & Periodic Table -->
+        <!-- LEFT: 3D Viewport & Collapsible Periodic Table -->
         <div id="left-pane">
             <div id="viewport-container">
                 <div id="element-title">Nitrogen (7)</div>
@@ -25,16 +25,22 @@
                 </div>
             </div>
 
-            <div id="ptable-container">
-                <div class="ptable-controls">
-                    <label for="color-mode-select">Color Table By: </label>
-                    <select id="color-mode-select">
-                        <option value="state">Metal / Non-Metal / State</option>
-                        <option value="block">Orbital Block (s, p, d, f)</option>
-                        <option value="group">Group Type</option>
-                    </select>
+            <!-- Collapsible Periodic Table Drawer -->
+            <div id="ptable-drawer">
+                <button id="ptable-toggle-btn" title="Toggle Periodic Table">
+                    <span id="drawer-icon">▼</span> Periodic Table
+                </button>
+                <div id="ptable-container">
+                    <div class="ptable-controls">
+                        <label for="color-mode-select">Color Table By: </label>
+                        <select id="color-mode-select">
+                            <option value="state">Metal / Non-Metal / State</option>
+                            <option value="block">Orbital Block (s, p, d, f)</option>
+                            <option value="group">Group Type</option>
+                        </select>
+                    </div>
+                    <div id="periodic-table"></div>
                 </div>
-                <div id="periodic-table"></div>
             </div>
         </div>
 
@@ -57,3 +63,4 @@
     <script src="main.js"></script>
 </body>
 </html>
+
