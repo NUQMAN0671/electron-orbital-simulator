@@ -1,0 +1,408 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    user-select: none;
+}
+
+body, html {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0d1117;
+    color: #e6edf3;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* LEFT PANE */
+#left-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-right: 2px solid #21262d;
+    min-width: 0;
+}
+
+#viewport-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: radial-gradient(circle at center, #0d2137 0%, #050b14 100%);
+}
+
+#element-title {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    left: auto;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #58a6ff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    pointer-events: none;
+    z-index: 10;
+    text-transform: capitalize;
+}
+
+#view-controls {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    background: rgba(22, 27, 34, 0.85);
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    backdrop-filter: blur(8px);
+    z-index: 10;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: calc(100% - 40px);
+}
+
+#view-controls button {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+#view-controls button.active {
+    background: #1f6beb;
+    color: #fff;
+    border-color: #58a6ff;
+}
+
+.toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #c9d1d9;
+    cursor: pointer;
+    padding: 0 6px;
+    white-space: nowrap;
+}
+
+/* COLLAPSIBLE PERIODIC TABLE DRAWER */
+#ptable-drawer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #161b22;
+    border-top: 2px solid #30363d;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+}
+
+#ptable-drawer.collapsed {
+    transform: translateY(100%);
+}
+
+#ptable-toggle-btn {
+    position: absolute;
+    top: -38px;
+    left: 20px;
+    height: 38px;
+    padding: 0 16px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: #58a6ff;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#ptable-toggle-btn:hover {
+    background: #21262d;
+    color: #79c0ff;
+}
+
+#ptable-container {
+    height: 280px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+}
+
+.ptable-controls {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    color: #8b949e;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#color-mode-select {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    padding: 4px 8px;
+    border-radius: 4px;
+    outline: none;
+}
+
+#periodic-table {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(36px, 1fr));
+    grid-template-rows: repeat(5, 1fr);
+    gap: 3px;
+    flex: 1;
+    min-width: 680px;
+}
+
+.elem-btn {
+    border-radius: 3px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: transform 0.1s ease, border 0.1s ease;
+    border: 1px solid transparent;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    min-height: 38px;
+}
+
+.elem-btn .sym { font-weight: bold; font-size: 0.85rem; }
+.elem-btn .num { font-size: 0.6rem; opacity: 0.8; }
+.elem-btn:hover { transform: scale(1.15); z-index: 10; border-color: #ffffff; }
+.elem-btn.active { border: 2px solid #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.6); }
+
+/* COLOR SCHEME CLASSES */
+.c-gas { background: #238636; }
+.c-liquid { background: #1f6beb; }
+.c-solid { background: #343942; }
+
+.c-block-s { background: #da3633; }
+.c-block-p { background: #8957e5; }
+.c-block-d { background: #d29922; }
+.c-block-f { background: #238636; }
+
+.c-grp-nonmetal { background: #1f6beb; }
+.c-grp-noble { background: #8957e5; }
+.c-grp-alkali { background: #da3633; }
+.c-grp-alkaline { background: #f0883e; }
+.c-grp-transition { background: #d29922; }
+.c-grp-post { background: #3fb950; }
+.c-grp-metalloid { background: #238636; }
+
+/* AUFBAU EXCEPTION STYLING */
+.c-exception {
+    background: linear-gradient(135deg, #e74c3c 0%, #8e44ad 100%) !important;
+    border: 1px dashed #ffbe76 !important;
+}
+
+#exception-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #ffbe76;
+    background: rgba(231, 76, 60, 0.25);
+    border: 1px solid #e74c3c;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+/* RIGHT PANE */
+#right-pane {
+    width: 350px;
+    background: #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+
+#right-pane h3 {
+    text-align: center;
+    color: #8b949e;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#diagram-container {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+
+.shell-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 6px;
+}
+
+.shell-row.valence-highlight {
+    border-color: #58a6ff;
+    background: #111d2e;
+}
+
+.shell-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.shell-toggle input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #1f6beb;
+    width: 16px;
+    height: 16px;
+}
+
+.shell-label {
+    width: 32px;
+    font-size: 0.9rem;
+    color: #58a6ff;
+    font-weight: bold;
+}
+
+.boxes-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.orbital-box {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid #30363d;
+    background: #161b22;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: #58a6ff;
+    border-radius: 4px;
+}
+
+#shorthand-box {
+    margin-top: 15px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.shorthand-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+#shorthand-box .label {
+    font-size: 0.75rem;
+    color: #8b949e;
+}
+
+#shorthand-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+/* RESPONSIVE MEDIA QUERIES (MOBILE / TABLET) */
+@media (max-width: 868px) {
+    #app {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    #left-pane {
+        height: 60vh;
+        min-height: 400px;
+        border-right: none;
+        border-bottom: 2px solid #21262d;
+    }
+
+    #right-pane {
+        width: 100%;
+        height: auto;
+        min-height: 40vh;
+    }
+
+    #element-title {
+        font-size: 1.4rem;
+        bottom: 70px;
+        right: 12px;
+        left: auto;
+    }
+
+    #view-controls {
+        top: 15px;
+        bottom: auto;
+        left: 12px;
+        right: 12px;
+        justify-content: space-around;
+        gap: 6px;
+        padding: 8px;
+        background: rgba(13, 17, 23, 0.92);
+        max-width: none;
+    }
+
+    #view-controls button {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .toggle-btn {
+        font-size: 0.75rem;
+        flex: 0 0 auto;
+    }
+
+    #ptable-container {
+        height: 240px;
+    }
+
+    #diagram-container {
+        max-height: none;
+    }
+}
