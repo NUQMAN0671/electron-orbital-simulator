@@ -71,6 +71,14 @@ const SUBSHELLS = [
     { name: "5p", n: 5, capacity: 6, boxes: 3, type: "p", radius: 14.2, color: 0x54a0ff }
 ];
 
+// Aufbau Exception Map
+const AUFBAU_EXCEPTIONS = {
+    24: { "4s": 1, "3d": 5 },  // Chromium (Cr): [Ar] 3d⁵ 4s¹
+    29: { "4s": 1, "3d": 10 }, // Copper (Cu):   [Ar] 3d¹⁰ 4s¹
+    42: { "5s": 1, "4d": 5 },  // Molybdenum (Mo): [Kr] 4d⁵ 5s¹
+    47: { "5s": 1, "4d": 10 }  // Silver (Ag):    [Kr] 4d¹⁰ 5s¹
+};
+
 let selectedElement = ELEMENTS.find(e => e.sym === "N");
 let activeConfig = [];
 let currentViewMode = "quantum";
@@ -119,7 +127,6 @@ function createTextSprite(text, colorStr = '#ffffff') {
 }
 
 // --- 3D Mesh Helpers ---
-
 function createNucleus() {
     const geometry = new THREE.SphereGeometry(0.5, 32, 32);
     const material = new THREE.MeshStandardMaterial({
@@ -339,24 +346,49 @@ function build3DScene() {
 function calculateConfig(z) {
     let remaining = z;
     activeConfig = [];
+    const overrides = AUFBAU_EXCEPTIONS[z] || null;
 
-    SUBSHELLS.forEach(sub => {
-        if (remaining <= 0) return;
-        const count = Math.min(remaining, sub.capacity);
-        activeConfig.push({
-            name: sub.name,
-            n: sub.n,
-            count: count,
-            boxes: sub.boxes,
-            capacity: sub.capacity,
-            visible: true
+    if (overrides) {
+        SUBSHELLS.forEach(sub => {
+            if (remaining <= 0) return;
+
+            let count = 0;
+            if (overrides.hasOwnProperty(sub.name)) {
+                count = overrides[sub.name];
+            } else {
+                count = Math.min(remaining, sub.capacity);
+            }
+
+            if (count > 0) {
+                activeConfig.push({
+                    name: sub.name,
+                    n: sub.n,
+                    count: count,
+                    boxes: sub.boxes,
+                    capacity: sub.capacity,
+                    visible: true
+                });
+                remaining -= count;
+            }
         });
-        remaining -= count;
-    });
+    } else {
+        SUBSHELLS.forEach(sub => {
+            if (remaining <= 0) return;
+            const count = Math.min(remaining, sub.capacity);
+            activeConfig.push({
+                name: sub.name,
+                n: sub.n,
+                count: count,
+                boxes: sub.boxes,
+                capacity: sub.capacity,
+                visible: true
+            });
+            remaining -= count;
+        });
+    }
 }
 
 // --- UI Rendering ---
-
 function renderPeriodicTable() {
     const tableEl = document.getElementById('periodic-table');
     tableEl.innerHTML = '';
@@ -366,7 +398,11 @@ function renderPeriodicTable() {
         const btn = document.createElement('div');
         let colorClass = "";
 
-        if (colorMode === "state") {
+        const isException = AUFBAU_EXCEPTIONS.hasOwnProperty(elem.num);
+
+        if (isException) {
+            colorClass = "c-exception";
+        } else if (colorMode === "state") {
             colorClass = `c-${elem.state}`;
         } else if (colorMode === "block") {
             colorClass = `c-block-${elem.block}`;
@@ -377,6 +413,7 @@ function renderPeriodicTable() {
         btn.className = `elem-btn ${colorClass} ${elem.num === selectedElement.num ? 'active' : ''}`;
         btn.style.gridRow = elem.row;
         btn.style.gridColumn = elem.col;
+        btn.title = isException ? `${elem.name} (Exception to Aufbau Principle)` : elem.name;
         btn.innerHTML = `<span class="num">${elem.num}</span><span class="sym">${elem.sym}</span>`;
         btn.onclick = () => selectElement(elem);
         tableEl.appendChild(btn);
@@ -453,6 +490,10 @@ function renderRightDiagram() {
         shorthandHtml = activeConfig.map(c => `${c.name}<sup>${c.count}</sup>`).join(' ');
     }
 
+    if (AUFBAU_EXCEPTIONS.hasOwnProperty(selectedElement.num)) {
+        shorthandHtml += `<br><span id="exception-badge">⚠️ Exception to Aufbau Principle</span>`;
+    }
+
     document.getElementById('shorthand-text').innerHTML = shorthandHtml;
 }
 
@@ -471,18 +512,20 @@ const ptableDrawer = document.getElementById('ptable-drawer');
 const toggleBtn = document.getElementById('ptable-toggle-btn');
 const drawerIcon = document.getElementById('drawer-icon');
 
+function resizeCanvas() {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+}
+
 toggleBtn.addEventListener('click', () => {
     ptableDrawer.classList.toggle('collapsed');
     const isCollapsed = ptableDrawer.classList.contains('collapsed');
     drawerIcon.innerText = isCollapsed ? '▲' : '▼';
 
-    setTimeout(() => {
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-    }, 320);
+    setTimeout(resizeCanvas, 320);
 });
 
 // --- Event Listeners ---
@@ -507,6 +550,11 @@ document.getElementById('btn-mode-bohr').addEventListener('click', () => {
     build3DScene();
 });
 
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => {
+    setTimeout(resizeCanvas, 200);
+});
+
 // Initial Setup
 selectElement(selectedElement);
 
@@ -516,13 +564,5 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
-
-window.addEventListener('resize', () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-});
 
 animate();
